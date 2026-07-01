@@ -30,7 +30,7 @@ def encode_image(image_path:Optional[str] = None,
         if url:
             image = get_image_from_url(url).content
         
-        if image_path:
+        elif image_path:
             with open(image_path, "rb") as f:
                 image = f.read()
         
