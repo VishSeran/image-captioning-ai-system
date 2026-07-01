@@ -15,11 +15,11 @@ vision_model = AutoModelForImageTextToText.from_pretrained(
 vision_processor = AutoProcessor.from_pretrained(VISION_MODEL)
 
 
-def get_response_from_model(encoded_images, user_query):
+def get_response_from_model(images, user_query):
     
     try:
         
-        if not encoded_images:
+        if not images:
             raise ValueError("Image inputs must not be empty")
         
         if not user_query:
@@ -36,7 +36,8 @@ def get_response_from_model(encoded_images, user_query):
                         "text": system_message + user_query
                     },
                     {
-                        "type": "image_url"
+                        "type": "image",
+                        "path": images
                     }
                 ]
             }

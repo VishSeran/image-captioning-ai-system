@@ -22,7 +22,7 @@ def get_image_from_url(url):
         logger.error(f"Failed to fetch image: {e}")
         raise
 
-def encode_image(image_paths:Optional[list[str]] = None,
+def encode_images(image_paths:Optional[list[str]] = None,
                                 urls:Optional[list[str]] = None):
     
     try:
@@ -50,6 +50,32 @@ def encode_image(image_paths:Optional[list[str]] = None,
     
     except Exception as e:
         logger.error(f"Multi-image encoding failed: : {e}")
+        raise
+    
+def encode_image(image_path:Optional[str] = None,
+                                url:Optional[str] = None):
+    
+    try:
+        
+        image = None
+    
+        if url:
+            image = Image.open(io.BytesIO(get_image_from_url(url).content)).convert("RGB")
+            
+        if image_path: 
+            image = Image.open(image_path).convert("RGB")
+                
+        if not image:
+            raise ValueError("Provide at least one image path or URL.")
+        
+        return image
+    
+    except ValueError as e:
+        logger.error(f"Value error: {e}")
+        raise
+    
+    except Exception as e:
+        logger.error(f"Single-image encoding failed: : {e}")
         raise
         
  
