@@ -1,35 +1,31 @@
 from typing import Optional
 from modules.logger import get_logger
 import requests
-import os
 import base64
 
 logger = get_logger("data-extraction")
 
 def get_image_from_url(url):
     
-    try:
-        if not url:
+    if not url:
             raise ValueError ("URL is empty or none")
-        
-        response = requests.get(url)
-        
-        if response.status_code == 200:
-            return response
-        else:
-            raise ValueError("Error in response fetching")
-            
-    except ValueError as e:
-        print(f"Value error: {e}")
-        
-    except Exception as e:
-        print(f"Error in get image from url: {e}")
-        
+    
+    try:
+    
+        response = requests.get(url, timeout=20)
+        response.raise_for_status()
+        return response
+         
+    except requests.RequestException as e:
+        logger.error(f"Failed to fetch image: {e}")
+        raise
 
 def encode_image(image_path:Optional[str] = None,
                                 url:Optional[str] = None):
     
     try:
+        
+        image = None
     
         if url:
             image = get_image_from_url(url).content
