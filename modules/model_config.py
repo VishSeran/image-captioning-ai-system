@@ -27,6 +27,20 @@ def get_response_from_model(encoded_images, user_query):
         
         system_message = "You are a helpful assistant. Answer the following user query in 1 or 2 sentences: "
 
+        message = [
+            {
+                "role": "user",
+                "content": [
+                    {
+                        "type": "text",
+                        "text": system_message + user_query
+                    },
+                    {
+                        "type": "image_url"
+                    }
+                ]
+            }
+        ]
     except ValueError as e:
         logger.error(f"Value error: {e}")
         raise
